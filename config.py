@@ -29,7 +29,7 @@ AUTO_DELETE_ENABLED = os.getenv("AUTO_DELETE_ENABLED", "True").lower() == "true"
 AUTO_DELETE_TIMER = int(os.getenv("AUTO_DELETE_TIMER", "1200"))  # 20 minutes in seconds
 
 # Force sub channels (list dynamically loaded from env)
-FORCE_SUB_CHANNELS = os.getenv("FORCE_SUB_CHANNELS", "").split(",") if os.getenv("FORCE_SUB_CHANNELS") else []
+FORCE_SUB_CHANNELS = os.getenv("FORCE_SUB_CHANNELS", "@just_test_only_0 , @log_chana").split(",") if os.getenv("FORCE_SUB_CHANNELS") else []
 
 # Admins list loaded from environment variable
 ADMINS = [int(admin_id) for admin_id in os.getenv("ADMINS", "7282066033").split(",")]
