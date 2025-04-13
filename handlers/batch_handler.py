@@ -1,4 +1,4 @@
-from pyrogram import Client, filters
+from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from utils.command_handler import CommandHandler
 from database.file_manager import FileManager
@@ -7,16 +7,11 @@ import asyncio
 
 batch_states = {}
 
-@filters.command("batch")
-@CommandHandler.ban_check
-@CommandHandler.force_sub_check
 async def batch_handler(client: Client, message):
     user_id = message.from_user.id
     await message.reply("How many files do you want to upload? Please enter a number (e.g., 1, 2, 3...)")
     batch_states[user_id] = {"step": "awaiting_count"}
 
-@filters.regex(r"^\d+$")
-@CommandHandler.ban_check
 async def batch_count_handler(client: Client, message):
     user_id = message.from_user.id
     if user_id not in batch_states or batch_states[user_id]["step"] != "awaiting_count":
@@ -26,8 +21,6 @@ async def batch_count_handler(client: Client, message):
     batch_states[user_id] = {"step": "collecting_files", "count": count, "files": [], "current": 0}
     await message.reply(f"Please upload {count} files one by one.")
 
-@filters.document
-@CommandHandler.ban_check
 async def batch_file_handler(client: Client, message):
     user_id = message.from_user.id
     if user_id not in batch_states or batch_states[user_id]["step"] != "collecting_files":
