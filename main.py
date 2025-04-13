@@ -3,7 +3,7 @@ from config import BOT_TOKEN, API_ID, API_HASH, LOG_LEVEL
 import logging
 import sys
 import os
-from aiohttp import web  # aiohttp ইমপোর্ট করা হলো
+from aiohttp import web
 import asyncio
 
 # logs/ ডিরেক্টরি তৈরি করা
@@ -84,19 +84,25 @@ async def start_http_server():
     http_app.add_routes([web.get('/', handle_health_check)])
     runner = web.AppRunner(http_app)
     await runner.setup()
-    site = web.TCPSite(runner, '0.0.0.0', 8080)  # পোর্ট ৮০৮০-এ সার্ভার চলবে
+    port = int(os.getenv("PORT", 8080))  # Koyeb-এ PORT এনভায়রনমেন্ট ভেরিয়েবল থেকে পড়া
+    site = web.TCPSite(runner, '0.0.0.0', port)
     await site.start()
-    logger.info("HTTP server started on port 8080 for health check")
+    logger.info(f"HTTP server started on port {port} for health check")
 
-if __name__ == "__main__":
-    logger.info("Starting File Share Bot...")
+# Pyrogram bot এবং HTTP সার্ভার একসাথে চালানোর ফাংশন
+async def main():
     try:
-        # Pyrogram bot এবং HTTP সার্ভার একসাথে চালানোর জন্য asyncio ব্যবহার
-        loop = asyncio.get_event_loop()
-        loop.create_task(app.start())  # Pyrogram bot শুরু
-        loop.create_task(start_http_server())  # HTTP সার্ভার শুরু
-        loop.run_until_complete(idle())  # Bot চলতে থাকবে
-        loop.run_until_complete(app.stop())  # Bot বন্ধ হলে স্টপ
+        # HTTP সার্ভার শুরু
+        await start_http_server()
+        # Pyrogram bot শুরু
+        await app.start()
+        logger.info("File Share Bot is running...")
+        await idle()  # Bot চলতে থাকবে
+        await app.stop()  # Bot বন্ধ হলে স্টপ
     except Exception as e:
         logger.error(f"Bot crashed: {e}")
         raise
+
+if __name__ == "__main__":
+    logger.info("Starting File Share Bot...")
+    asyncio.run(main())
