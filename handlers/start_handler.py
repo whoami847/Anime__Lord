@@ -4,7 +4,7 @@ from config import WELCOME_MESSAGE, WELCOME_IMAGES_DIR, FORCE_SUB_CHANNELS
 from utils.message_formatter import MessageFormatter
 from database.user_manager import UserManager
 
-@filters.command("start")
+# /start কমান্ড হ্যান্ডলার
 async def start_handler(client: Client, message):
     user_id = message.from_user.id
     username = message.from_user.username
@@ -33,4 +33,4 @@ async def start_handler(client: Client, message):
         photo=image,
         caption=text,
         reply_markup=InlineKeyboardMarkup(buttons)
-      )
+    )
