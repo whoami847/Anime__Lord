@@ -1,11 +1,9 @@
-from pyrogram import Client, filters
+from pyrogram import Client
 from utils.command_handler import CommandHandler
 from database.user_manager import UserManager
 from utils.message_formatter import MessageFormatter
 import asyncio
 
-@filters.command("broadcast")
-@CommandHandler.admin_only
 async def broadcast_handler(client: Client, message):
     if len(message.command) < 2:
         await message.reply("Please provide a message to broadcast!")
