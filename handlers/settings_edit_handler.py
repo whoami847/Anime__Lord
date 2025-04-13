@@ -1,10 +1,8 @@
-from pyrogram import Client, filters
+from pyrogram import Client
 from utils.command_handler import CommandHandler
 from config import SETTINGS_MESSAGE, SETTINGS_IMAGES_DIR
 import os
 
-@filters.command("setting_edit_msg")
-@CommandHandler.admin_only
 async def setting_edit_msg_handler(client: Client, message):
     if len(message.command) < 2:
         await message.reply(f"Current settings message:\n{SETTINGS_MESSAGE}\n\nPlease provide a new message (e.g., /setting_edit_msg New message here)")
@@ -23,8 +21,6 @@ async def setting_edit_msg_handler(client: Client, message):
 
     await message.reply(f"Settings message updated to:\n{new_message}")
 
-@filters.command("setting_edit_img")
-@CommandHandler.admin_only
 async def setting_edit_img_handler(client: Client, message):
     if not message.reply_to_message or not message.reply_to_message.photo:
         await message.reply("Please reply to a photo to set as the settings image!")
