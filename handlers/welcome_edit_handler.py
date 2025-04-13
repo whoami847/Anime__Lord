@@ -1,10 +1,8 @@
-from pyrogram import Client, filters
+from pyrogram import Client
 from utils.command_handler import CommandHandler
 from config import WELCOME_MESSAGE, WELCOME_IMAGES_DIR
 import os
 
-@filters.command("welcome_edit")
-@CommandHandler.admin_only
 async def welcome_edit_handler(client: Client, message):
     if len(message.command) < 2:
         await message.reply(f"Current welcome message:\n{WELCOME_MESSAGE}\n\nPlease provide a new message (e.g., /welcome_edit New message here)")
@@ -23,8 +21,6 @@ async def welcome_edit_handler(client: Client, message):
 
     await message.reply(f"Welcome message updated to:\n{new_message}")
 
-@filters.command("welcome_edit_img")
-@CommandHandler.admin_only
 async def welcome_edit_img_handler(client: Client, message):
     if not message.reply_to_message or not message.reply_to_message.photo:
         await message.reply("Please reply to a photo to set as the welcome image!")
