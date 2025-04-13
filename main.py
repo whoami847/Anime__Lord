@@ -2,13 +2,19 @@ from pyrogram import Client, idle
 from config import BOT_TOKEN, API_ID, API_HASH, LOG_LEVEL
 import logging
 import sys
+import os  # ডিরেক্টরি তৈরির জন্য os মডিউল ইমপোর্ট করা হলো
+
+# logs/ ডিরেক্টরি তৈরি করা
+LOG_DIR = "logs"
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)  # ডিরেক্টরি না থাকলে তৈরি করবে
 
 # Configure logging
 logging.basicConfig(
     level=getattr(logging, LOG_LEVEL),
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("logs/bot.log"),
+        logging.FileHandler(os.path.join(LOG_DIR, "bot.log")),  # পাথ ডায়নামিকভাবে জেনারেট করা
         logging.StreamHandler(sys.stdout)
     ]
 )
