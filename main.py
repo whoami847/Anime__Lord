@@ -44,7 +44,8 @@ app = Client(
     bot_token=BOT_TOKEN
 )
 
-# Register handlers
+# Register handlers with logging
+logger.info("Registering command handlers...")
 app.on_message(filters.command("start"))(start_handler)
 app.on_message(filters.command("help"))(help_handler)
 app.on_message(filters.command("genlink"))(file_share_handler)
@@ -74,9 +75,11 @@ app.on_callback_query(filters.regex("toggle_hide_caption"))(toggle_hide_caption)
 app.on_callback_query(filters.regex("toggle_channel_button"))(toggle_channel_button)
 app.on_callback_query(filters.regex("refresh_file_settings"))(refresh_file_settings)
 app.on_message(filters.command("restart"))(restart_handler)
+logger.info("Command handlers registered successfully.")
 
 # HTTP server for Koyeb health check
 async def handle_health_check(request):
+    logger.info("Received health check request.")
     return web.Response(text="Bot is running!", status=200)
 
 async def start_http_server():
@@ -84,7 +87,7 @@ async def start_http_server():
     http_app.add_routes([web.get('/', handle_health_check)])
     runner = web.AppRunner(http_app)
     await runner.setup()
-    port = int(os.getenv("PORT", 8080))  # Koyeb-এ PORT এনভায়রনমেন্ট ভেরিয়েবল থেকে পড়া
+    port = int(os.getenv("PORT", 8080))
     site = web.TCPSite(runner, '0.0.0.0', port)
     await site.start()
     logger.info(f"HTTP server started on port {port} for health check")
@@ -97,8 +100,8 @@ async def main():
         # Pyrogram bot শুরু
         await app.start()
         logger.info("File Share Bot is running...")
-        await idle()  # Bot চলতে থাকবে
-        await app.stop()  # Bot বন্ধ হলে স্টপ
+        await idle()
+        await app.stop()
     except Exception as e:
         logger.error(f"Bot crashed: {e}")
         raise
