@@ -1,12 +1,9 @@
-from pyrogram import Client, filters
+from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from utils.message_formatter import MessageFormatter
 from utils.command_handler import CommandHandler
 from config import ABOUT_MESSAGE
 
-@filters.command("help")
-@CommandHandler.ban_check
-@CommandHandler.force_sub_check
 async def help_handler(client: Client, message):
     text, _ = MessageFormatter.format_message(
         f"{ABOUT_MESSAGE}\n\nSTILL HAVE DOUBTS, CONTACT BELOW PERSONS/GROUP AS PER YOUR NEED!"
