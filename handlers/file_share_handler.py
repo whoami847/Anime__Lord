@@ -1,13 +1,10 @@
-from pyrogram import Client, filters
+from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from utils.command_handler import CommandHandler
 from database.file_manager import FileManager
 from config import AUTO_DELETE_ENABLED, AUTO_DELETE_TIMER
 import asyncio
 
-@filters.command("genlink")
-@CommandHandler.ban_check
-@CommandHandler.force_sub_check
 async def file_share_handler(client: Client, message):
     if not message.reply_to_message or not message.reply_to_message.document:
         await message.reply("Please reply to a file to generate a share link!")
