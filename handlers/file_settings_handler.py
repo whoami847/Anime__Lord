@@ -1,4 +1,4 @@
-from pyrogram import Client, filters
+from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from utils.command_handler import CommandHandler
 import json
@@ -16,8 +16,6 @@ def save_file_settings_config(config):
     with open(FILE_SETTINGS_CONFIG_FILE, "w") as f:
         json.dump(config, f)
 
-@filters.command("files")
-@CommandHandler.admin_only
 async def file_settings_handler(client: Client, message):
     config = load_file_settings_config()
     text = (
@@ -38,7 +36,6 @@ async def file_settings_handler(client: Client, message):
         reply_markup=InlineKeyboardMarkup(buttons)
     )
 
-@filters.callback_query(filters.regex("toggle_protect_content"))
 async def toggle_protect_content(client: Client, callback_query):
     config = load_file_settings_config()
     config["protect_content"] = not config["protect_content"]
@@ -61,7 +58,6 @@ async def toggle_protect_content(client: Client, callback_query):
         reply_markup=InlineKeyboardMarkup(buttons)
     )
 
-@filters.callback_query(filters.regex("toggle_hide_caption"))
 async def toggle_hide_caption(client: Client, callback_query):
     config = load_file_settings_config()
     config["hide_caption"] = not config["hide_caption"]
@@ -84,7 +80,6 @@ async def toggle_hide_caption(client: Client, callback_query):
         reply_markup=InlineKeyboardMarkup(buttons)
     )
 
-@filters.callback_query(filters.regex("toggle_channel_button"))
 async def toggle_channel_button(client: Client, callback_query):
     config = load_file_settings_config()
     config["channel_button"] = not config["channel_button"]
@@ -107,7 +102,6 @@ async def toggle_channel_button(client: Client, callback_query):
         reply_markup=InlineKeyboardMarkup(buttons)
     )
 
-@filters.callback_query(filters.regex("refresh_file_settings"))
 async def refresh_file_settings(client: Client, callback_query):
     config = load_file_settings_config()
     text = (
@@ -126,4 +120,4 @@ async def refresh_file_settings(client: Client, callback_query):
     await callback_query.message.edit(
         text,
         reply_markup=InlineKeyboardMarkup(buttons)
-  )
+    )
