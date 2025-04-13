@@ -1,20 +1,20 @@
-from pyrogram import Client, idle
+from pyrogram import Client, idle, filters
 from config import BOT_TOKEN, API_ID, API_HASH, LOG_LEVEL
 import logging
 import sys
-import os  # ডিরেক্টরি তৈরির জন্য os মডিউল ইমপোর্ট করা হলো
+import os
 
 # logs/ ডিরেক্টরি তৈরি করা
 LOG_DIR = "logs"
 if not os.path.exists(LOG_DIR):
-    os.makedirs(LOG_DIR)  # ডিরেক্টরি না থাকলে তৈরি করবে
+    os.makedirs(LOG_DIR)
 
 # Configure logging
 logging.basicConfig(
     level=getattr(logging, LOG_LEVEL),
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler(os.path.join(LOG_DIR, "bot.log")),  # পাথ ডায়নামিকভাবে জেনারেট করা
+        logging.FileHandler(os.path.join(LOG_DIR, "bot.log")),
         logging.StreamHandler(sys.stdout)
     ]
 )
@@ -43,35 +43,35 @@ app = Client(
 )
 
 # Register handlers
-app.on_message()(start_handler)
-app.on_message()(help_handler)
-app.on_message()(file_share_handler)
-app.on_message()(batch_handler)
-app.on_message()(batch_count_handler)
-app.on_message()(batch_file_handler)
-app.on_message()(ban_handler)
-app.on_message()(unban_handler)
-app.on_message()(auto_delete_handler)
-app.on_callback_query()(toggle_auto_delete)
-app.on_callback_query()(set_timer)
-app.on_callback_query()(refresh_auto_delete)
-app.on_callback_query()(close_message)
-app.on_message()(force_sub_handler)
-app.on_message()(add_force_sub_handler)
-app.on_message()(remove_force_sub_handler)
-app.on_message()(broadcast_handler)
-app.on_message()(welcome_edit_handler)
-app.on_message()(welcome_edit_img_handler)
-app.on_message()(about_edit_msg_handler)
-app.on_message()(about_edit_img_handler)
-app.on_message()(setting_edit_msg_handler)
-app.on_message()(setting_edit_img_handler)
-app.on_message()(file_settings_handler)
-app.on_callback_query()(toggle_protect_content)
-app.on_callback_query()(toggle_hide_caption)
-app.on_callback_query()(toggle_channel_button)
-app.on_callback_query()(refresh_file_settings)
-app.on_message()(restart_handler)
+app.on_message(filters.command("start"))(start_handler)
+app.on_message(filters.command("help"))(help_handler)
+app.on_message(filters.command("genlink"))(file_share_handler)
+app.on_message(filters.command("batch"))(batch_handler)
+app.on_message(filters.regex(r"^\d+$"))(batch_count_handler)
+app.on_message(filters.document)(batch_file_handler)
+app.on_message(filters.command("ban"))(ban_handler)
+app.on_message(filters.command("unban"))(unban_handler)
+app.on_message(filters.command("auto_del"))(auto_delete_handler)
+app.on_callback_query(filters.regex("toggle_auto_delete"))(toggle_auto_delete)
+app.on_callback_query(filters.regex("set_timer"))(set_timer)
+app.on_callback_query(filters.regex("refresh_auto_delete"))(refresh_auto_delete)
+app.on_callback_query(filters.regex("close"))(close_message)
+app.on_message(filters.command("force_sub"))(force_sub_handler)
+app.on_message(filters.command("req_force_sub_add"))(add_force_sub_handler)
+app.on_message(filters.command("req_force_sub_remv"))(remove_force_sub_handler)
+app.on_message(filters.command("broadcast"))(broadcast_handler)
+app.on_message(filters.command("welcome_edit"))(welcome_edit_handler)
+app.on_message(filters.command("welcome_edit_img"))(welcome_edit_img_handler)
+app.on_message(filters.command("about_edit_msg"))(about_edit_msg_handler)
+app.on_message(filters.command("about_edit_img"))(about_edit_img_handler)
+app.on_message(filters.command("setting_edit_msg"))(setting_edit_msg_handler)
+app.on_message(filters.command("setting_edit_img"))(setting_edit_img_handler)
+app.on_message(filters.command("files"))(file_settings_handler)
+app.on_callback_query(filters.regex("toggle_protect_content"))(toggle_protect_content)
+app.on_callback_query(filters.regex("toggle_hide_caption"))(toggle_hide_caption)
+app.on_callback_query(filters.regex("toggle_channel_button"))(toggle_channel_button)
+app.on_callback_query(filters.regex("refresh_file_settings"))(refresh_file_settings)
+app.on_message(filters.command("restart"))(restart_handler)
 
 if __name__ == "__main__":
     logger.info("Starting File Share Bot...")
