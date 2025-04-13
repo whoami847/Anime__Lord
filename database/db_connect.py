@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
-from config import MONGO_URI, DB_NAME
+from config import MONGO_URI, DB_NAME, LOG_LEVEL  # LOG_LEVEL ইমপোর্ট করা হলো
 import logging
 
 # Configure logging
