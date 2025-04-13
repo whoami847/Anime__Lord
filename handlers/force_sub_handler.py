@@ -1,9 +1,7 @@
-from pyrogram import Client, filters
+from pyrogram import Client
 from utils.command_handler import CommandHandler
 from config import FORCE_SUB_CHANNELS
 
-@filters.command("force_sub")
-@CommandHandler.admin_only
 async def force_sub_handler(client: Client, message):
     if not FORCE_SUB_CHANNELS:
         await message.reply("No force sub channels set.")
@@ -11,8 +9,6 @@ async def force_sub_handler(client: Client, message):
     text = "Current Force Sub Channels:\n" + "\n".join(FORCE_SUB_CHANNELS)
     await message.reply(text)
 
-@filters.command("req_force_sub_add")
-@CommandHandler.admin_only
 async def add_force_sub_handler(client: Client, message):
     if len(message.command) < 2:
         await message.reply("Please provide a channel username (e.g., /req_force_sub_add @channel)")
@@ -32,8 +28,6 @@ async def add_force_sub_handler(client: Client, message):
     except Exception as e:
         await message.reply(f"Error adding channel: {e}")
 
-@filters.command("req_force_sub_remv")
-@CommandHandler.admin_only
 async def remove_force_sub_handler(client: Client, message):
     if len(message.command) < 2:
         await message.reply("Please provide a channel username (e.g., /req_force_sub_remv @channel)")
